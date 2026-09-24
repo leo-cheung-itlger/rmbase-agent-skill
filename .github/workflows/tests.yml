@@ -1,0 +1,21 @@
+name: Offline tests
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.10', '3.13']
+    runs-on: ${{ matrix.os }}
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install "pytest>=8" ruff
+      - run: python -B -m pytest tests/rmbase -q
+      - run: ruff check --isolated --target-version py310 skills/rmbase/scripts tests/rmbase
