@@ -27,6 +27,30 @@ python skills/rmbase/scripts/rmbase.py gene METTL3 --assembly hg38 --json
 或在支持 ZIP 导入的宿主中导入该目录的压缩包。必须保留 `scripts/` 和 `references/`。
 Skill 会指导 Agent 调用 Python；安装不会自动注册全局 `rmbase` 命令。
 
+### ClawHub 发布
+
+在 ClawHub 中请导入这个独立仓库
+（`leo-cheung-itlger/rmbase-agent-skill`），并选择 `skills/rmbase`。
+不要把 `scientific-agent-skills` 的 fork 当作导入源：ClawHub 的 GitHub
+导入器只发现当前 GitHub 账号拥有的公开、非 fork 仓库。
+
+也可以在仓库根目录使用 CLI 发布：
+
+```bash
+npm i -g clawhub
+clawhub login
+clawhub skill publish ./skills/rmbase \
+  --slug rmbase \
+  --name "RMBase" \
+  --changelog "Initial ClawHub release"
+```
+
+ClawHub 新 Skill 的 registry 版本从 `1.0.0` 开始，后续发布独立递增；
+`SKILL.md` 中的 `metadata.version: "1.0"` 继续保留，因为 Scientific
+Agent Skills 要求该字段。ClawHub 对其 registry 中发布的 Skill 采用
+MIT-0；这不改变 RMBase 数据或第三方来源内容本身的权利归属。
+
+
 ## 已实现能力
 
 | 能力 | 实现与验证范围 |
