@@ -1,18 +1,26 @@
 ---
 name: rmbase
 description: Queries RMBase v3.0 for gene-associated RNA modifications, modification sites, enzymes, snoRNAs, RNA interactions, enriched motifs, and cancer-associated RNA-modifying proteins using bundled Python scripts and official downloadable datasets. Use for reproducible RMBase epitranscriptome queries with species, genome assembly, identifiers, and provenance.
-license: MIT
 compatibility: Requires Python 3.10+ and public network access to bioinformaticsscience.cn for remote queries. Uses only the Python standard library. Offline queries require an existing cache. No credentials or background service required.
 metadata:
   version: "1.0"
+  openclaw:
+    requires:
+      anyBins:
+        - python
+        - python3
+    emoji: "🧬"
+    homepage: https://github.com/leo-cheung-itlger/rmbase-agent-skill
 ---
 
 # RMBase
 
 Use the bundled [CLI](scripts/rmbase.py) for RMBase queries. Resolve its path relative
 to this skill's installed directory, not the user's current directory. Commands
-below assume the skill directory is the working directory. All commands return
-JSON by default. Installing the skill does not install a global `rmbase` executable.
+below assume the skill directory is the working directory. Use a Python 3.10+
+interpreter; hosts may expose it as `python` or `python3`. Examples below use
+`python` for brevity. All commands return JSON by default. Installing the skill
+does not install a global `rmbase` executable.
 
 ## Workflow
 
