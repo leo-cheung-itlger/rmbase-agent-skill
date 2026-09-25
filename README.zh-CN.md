@@ -97,7 +97,7 @@ clawhub login
 clawhub skill publish ./skills/rmbase \
   --slug rmbase \
   --name "RMBase" \
-  --categories research \
+  --categories knowledge \
   --topics "rna-modification,rmbase,epitranscriptomics" \
   --changelog "Initial ClawHub release"
 ```
