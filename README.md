@@ -31,6 +31,32 @@ directory if the host supports ZIP imports. Preserve `scripts/` and `references/
 The skill itself tells the agent how to invoke Python; installation does not
 register a global `rmbase` executable.
 
+### ClawHub
+
+For ClawHub, import this standalone repository
+(`leo-cheung-itlger/rmbase-agent-skill`) and select `skills/rmbase`. Do not use
+the `scientific-agent-skills` fork as the import source: ClawHub's GitHub
+importer only discovers public, non-fork repositories owned by the signed-in
+GitHub account.
+
+CLI publishing from the repository root:
+
+```bash
+npm i -g clawhub
+clawhub login
+clawhub skill publish ./skills/rmbase \
+  --slug rmbase \
+  --name "RMBase" \
+  --changelog "Initial ClawHub release"
+```
+
+A new ClawHub listing starts at registry version `1.0.0`; later publishes
+advance independently. Keep `metadata.version: "1.0"` in `SKILL.md` because
+Scientific Agent Skills requires that field. ClawHub applies MIT-0 to published
+registry skills; this does not change the rights in RMBase or third-party source
+content.
+
+
 ## What works
 
 | Capability | Implementation and evidence |
