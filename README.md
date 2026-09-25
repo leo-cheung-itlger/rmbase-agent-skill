@@ -31,32 +31,6 @@ directory if the host supports ZIP imports. Preserve `scripts/` and `references/
 The skill itself tells the agent how to invoke Python; installation does not
 register a global `rmbase` executable.
 
-### ClawHub
-
-For ClawHub, import this standalone repository
-(`leo-cheung-itlger/rmbase-agent-skill`) and select `skills/rmbase`. Do not use
-the `scientific-agent-skills` fork as the import source: ClawHub's GitHub
-importer only discovers public, non-fork repositories owned by the signed-in
-GitHub account.
-
-CLI publishing from the repository root:
-
-```bash
-npm i -g clawhub
-clawhub login
-clawhub skill publish ./skills/rmbase \
-  --slug rmbase \
-  --name "RMBase" \
-  --changelog "Initial ClawHub release"
-```
-
-A new ClawHub listing starts at registry version `1.0.0`; later publishes
-advance independently. Keep `metadata.version: "1.0"` in `SKILL.md` because
-Scientific Agent Skills requires that field. ClawHub applies MIT-0 to published
-registry skills; this does not change the rights in RMBase or third-party source
-content.
-
-
 ## What works
 
 | Capability | Implementation and evidence |
@@ -115,18 +89,54 @@ species/build, hashes and publication IDs when supplied. TSV is available with
 - Empty results do not establish biological absence. No genome liftover or
   clinical interpretation is performed. Website changes can break the adapter.
 
-## Platform distribution
+## Distribution
 
-The portable unit is an Agent Skills directory with `SKILL.md`, scripts and
-references. Host environments must permit local Python execution and relevant
-network access. **A shared skill format is not proof of end-to-end compatibility.**
-WorkBuddy and TRAE document local skill imports; this repository has not yet
-completed per-host installation tests or public marketplace listings.
+This repository is the **canonical source** for RMBase Agent Skill. The reusable
+bundle lives in `skills/rmbase`; query logic, parsers, references and safety
+boundaries are maintained here first. Platform registries and catalog repositories
+are distribution targets, not separate codebases.
 
-This GitHub repository is the canonical maintenance source. Platform listings
-should point to a versioned copy of this skill and publish their tested host/version,
-installation steps and limitations. Contributions to Scientific Agent Skills are
-an additional discovery channel, not a requirement for using this repository.
+### OpenAI and Agent Skills hosts
+
+OpenAI Skills are compatible with the open Agent Skills format. Use the complete
+`skills/rmbase` directory, or upload a ZIP containing that directory when the
+host supports ZIP import. The optional `agents/openai.yaml` file provides OpenAI
+UI metadata; hosts that do not use it can ignore it.
+
+### ClawHub / OpenClaw
+
+Publish the same `skills/rmbase` directory. From the repository root:
+
+```bash
+npm i -g clawhub
+clawhub login
+clawhub skill publish ./skills/rmbase \
+  --slug rmbase \
+  --name "RMBase" \
+  --categories research \
+  --topics "rna-modification,rmbase,epitranscriptomics" \
+  --changelog "Initial ClawHub release"
+```
+
+Use `--dry-run` before publishing when validating a release. ClawHub registry
+versions are independent from this repository's source revision. Its GitHub web
+importer discovers skills only from public, non-fork repositories owned by the
+signed-in GitHub account.
+
+### Scientific Agent Skills catalog
+
+The Scientific Agent Skills contribution is a downstream catalog copy. Keep the
+behavioral instructions, scripts and references synchronized from this canonical
+repository, then apply that catalog's own metadata, test layout and validation
+rules in the catalog PR. New RMBase functionality should be developed and tested
+here first.
+
+### Versioning policy
+
+Use Git commits/tags as the source revision for this repository. Marketplace or
+registry versions may advance independently. The `metadata.version` field in
+`SKILL.md` is bundle metadata and must not be treated as proof that every
+distribution channel is on the same release.
 
 ## Development
 
@@ -153,6 +163,6 @@ landscape, mechanisms and functions of RNA modifications*, Nucleic Acids Researc
 [DOI 10.1093/nar/gkad1070](https://doi.org/10.1093/nar/gkad1070).
 Also report this adapter's repository URL and commit when reproducibility matters.
 
-The initial adapter was developed against Scientific Agent Skills conventions.
-Code is provided under the [MIT license](LICENSE); that license does not relicense
-RMBase data or third-party saved page content. Test fixtures retain source metadata.
+The core bundle follows the open Agent Skills structure. Code is provided under
+the [MIT license](LICENSE); that license does not relicense RMBase data or
+third-party saved page content. Test fixtures retain source metadata.
