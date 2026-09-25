@@ -27,30 +27,6 @@ python skills/rmbase/scripts/rmbase.py gene METTL3 --assembly hg38 --json
 或在支持 ZIP 导入的宿主中导入该目录的压缩包。必须保留 `scripts/` 和 `references/`。
 Skill 会指导 Agent 调用 Python；安装不会自动注册全局 `rmbase` 命令。
 
-### ClawHub 发布
-
-在 ClawHub 中请导入这个独立仓库
-（`leo-cheung-itlger/rmbase-agent-skill`），并选择 `skills/rmbase`。
-不要把 `scientific-agent-skills` 的 fork 当作导入源：ClawHub 的 GitHub
-导入器只发现当前 GitHub 账号拥有的公开、非 fork 仓库。
-
-也可以在仓库根目录使用 CLI 发布：
-
-```bash
-npm i -g clawhub
-clawhub login
-clawhub skill publish ./skills/rmbase \
-  --slug rmbase \
-  --name "RMBase" \
-  --changelog "Initial ClawHub release"
-```
-
-ClawHub 新 Skill 的 registry 版本从 `1.0.0` 开始，后续发布独立递增；
-`SKILL.md` 中的 `metadata.version: "1.0"` 继续保留，因为 Scientific
-Agent Skills 要求该字段。ClawHub 对其 registry 中发布的 Skill 采用
-MIT-0；这不改变 RMBase 数据或第三方来源内容本身的权利归属。
-
-
 ## 已实现能力
 
 | 能力 | 实现与验证范围 |
@@ -101,12 +77,44 @@ TSV 使用 `--tsv --provenance-out provenance.json`，确保表格旁有来源�
 
 ## 跨平台分发
 
-可移植单位是包含 `SKILL.md`、脚本和参考资料的完整目录。宿主必须支持 Python 执行与相应网络访问。
-**格式通用不代表已经在每个平台完整验证。** WorkBuddy、TRAE 有本地 Skill 导入机制，
-本项目尚未完成各宿主的安装测试，也尚未上架公共技能市场。
+本仓库是 **RMBase Agent Skill 的唯一主维护源（canonical source）**。
+真正可复用的 Skill 位于 `skills/rmbase`；查询逻辑、解析器、参考资料和安全边界都优先在这里维护。
+各个平台、Registry 和 Skill 合集只是分发渠道，不另外维护一套业务代码。
 
-本 GitHub 仓库作为主要维护来源。后续平台上架应指向明确版本，公布实测平台版本、安装方式和限制，
-避免复制出多套不一致的代码。向 Scientific Agent Skills 贡献是补充推广渠道，不影响独立安装使用。
+### OpenAI 与 Agent Skills 宿主
+
+OpenAI Skills 兼容开放的 Agent Skills 格式。可以直接使用完整的
+`skills/rmbase` 目录，或在宿主支持时上传包含该目录的 ZIP。
+`agents/openai.yaml` 是可选的 OpenAI UI 元数据；其他宿主不需要使用它。
+
+### ClawHub / OpenClaw
+
+ClawHub 直接发布同一个 `skills/rmbase` 目录。在仓库根目录执行：
+
+```bash
+npm i -g clawhub
+clawhub login
+clawhub skill publish ./skills/rmbase \
+  --slug rmbase \
+  --name "RMBase" \
+  --categories research \
+  --topics "rna-modification,rmbase,epitranscriptomics" \
+  --changelog "Initial ClawHub release"
+```
+
+正式发布前可先加 `--dry-run` 做校验。ClawHub 的 registry 版本与本仓库源码版本独立管理。
+网页 GitHub Import 只会发现当前登录 GitHub 账号拥有的公开、非 fork 仓库中的 Skill。
+
+### Scientific Agent Skills 合集
+
+提交到 Scientific Agent Skills 的版本属于下游合集副本。核心行为说明、脚本和参考资料从本仓库同步，
+再在对方仓库的 PR 中遵守其自己的 metadata、测试目录和验证规则。RMBase 的新功能和修复应先在本仓库完成，
+再同步到该合集。
+
+### 版本规则
+
+本仓库以 Git commit/tag 作为源码版本依据；各 Marketplace 或 Registry 可以独立递增版本。
+`SKILL.md` 中的 `metadata.version` 属于 Skill bundle 元数据，不代表所有分发渠道一定处于同一发布版本。
 
 ## 开发与测试
 
@@ -127,5 +135,5 @@ RMBase 数据库及科学内容归原作者。本项目是独立维护的客户�
 [PMID 37956310](https://pubmed.ncbi.nlm.nih.gov/37956310/)，
 [DOI 10.1093/nar/gkad1070](https://doi.org/10.1093/nar/gkad1070)。需要复现时同时记录本项目 URL 与 commit。
 
-初始适配器按 Scientific Agent Skills 的结构规范开发。代码采用 [MIT 许可证](LICENSE)，
+核心 Skill 采用开放 Agent Skills 结构。代码采用 [MIT 许可证](LICENSE)，
 不因此改变 RMBase 数据或第三方网页内容的许可；测试样本保留来源说明。
